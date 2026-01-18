@@ -6,7 +6,7 @@
     <title>Connect | @MiniDestroyer07</title>
     <style>
         :root {
-            --primary: #00ffaa; /* Cyber Mint */
+            --primary: #00ffaa; 
             --bg: #050505;
             --text: #ffffff;
             --yt: #ff0000;
@@ -68,6 +68,7 @@
             font-weight: 900;
             letter-spacing: 2px;
             margin-top: 5px;
+            transition: background 0.3s;
         }
 
         .live-status {
@@ -117,13 +118,7 @@
         .btn-main-row { display: flex; justify-content: space-between; width: 100%; align-items: center; }
         .arrow { font-size: 1.2rem; opacity: 0.5; }
 
-        .discord-count {
-            font-size: 0.65rem;
-            color: var(--discord);
-            margin-top: 6px;
-            letter-spacing: 1px;
-            font-weight: bold;
-        }
+        .discord-count { font-size: 0.65rem; color: var(--discord); margin-top: 6px; letter-spacing: 1px; font-weight: bold; }
 
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
         .social { background: #111; padding: 18px; text-align: center; text-decoration: none; color: #fff; font-size: 0.75rem; font-weight: 800; border: 1px solid #222; transition: 0.2s; }
@@ -159,17 +154,11 @@
             </a>
             
             <a href="https://www.youtube.com/@MiniDestroyer07" target="_blank" class="btn">
-                <div class="btn-main-row">
-                    <span>NEW YOUTUBE VIDEO</span>
-                    <span class="arrow">→</span>
-                </div>
+                <div class="btn-main-row"><span>NEW YOUTUBE VIDEO</span><span class="arrow">→</span></div>
             </a>
             
             <a href="https://discord.gg/FTRzcnYn" target="_blank" class="btn">
-                <div class="btn-main-row">
-                    <span>COMMUNITY DISCORD</span>
-                    <span class="arrow">→</span>
-                </div>
+                <div class="btn-main-row"><span>COMMUNITY DISCORD</span><span class="arrow">→</span></div>
                 <span class="discord-count" id="discord-online">JOIN THE SQUAD</span>
             </a>
         </div>
@@ -185,17 +174,18 @@
     </div>
 
     <script>
-        const TWITCH_USER = 'minidestroyer07';
+        const channel = "minidestroyer07";
         const DISCORD_ID = '1457925590358429830';
 
-        // Checks Twitch Live Status without an API Key using Decapi
         async function checkTwitch() {
             try {
-                const response = await fetch(`https://decapi.me/twitch/is_live/${TWITCH_USER}`);
-                const status = await response.text();
-                const isLive = status.trim() === 'true';
+                const url = `https://api.allorigins.win/get?url=${encodeURIComponent('https://www.twitch.tv/' + channel)}`;
+                const response = await fetch(url);
+                const data = await response.json();
                 
-                if(isLive) {
+                const isLive = data.contents.includes('"isLiveBroadcast":true');
+                
+                if (isLive) {
                     document.body.classList.add('is-live');
                     document.getElementById('status-text').innerText = 'LIVE NOW';
                     document.getElementById('cta-text').innerText = 'WATCH LIVE STREAM';
@@ -204,10 +194,9 @@
                     document.getElementById('status-text').innerText = 'OFFLINE';
                     document.getElementById('cta-text').innerText = 'LATEST STREAM';
                 }
-            } catch(e) { console.warn("Twitch check skipped."); }
+            } catch (e) { console.error("Twitch Sync Failed"); }
         }
 
-        // Fetches real-time online count from your Discord Server
         async function getDiscordCount() {
             try {
                 const res = await fetch(`https://discord.com/api/guilds/${DISCORD_ID}/widget.json`);
@@ -215,16 +204,13 @@
                 if (data.presence_count !== undefined) {
                     document.getElementById('discord-online').innerText = `${data.presence_count} ONLINE NOW`;
                 }
-            } catch (e) {
-                document.getElementById('discord-online').innerText = "JOIN THE SQUAD";
-            }
+            } catch (e) { document.getElementById('discord-online').innerText = "JOIN THE SQUAD"; }
         }
 
-        // Initialize and Set Intervals
         checkTwitch();
         getDiscordCount();
-        setInterval(checkTwitch, 120000); // 2 mins
-        setInterval(getDiscordCount, 60000); // 1 min
+        setInterval(checkTwitch, 60000); 
+        setInterval(getDiscordCount, 60000);
     </script>
 </body>
 </html>
