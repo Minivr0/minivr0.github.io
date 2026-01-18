@@ -3,126 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Portfolio</title>
+    <title>Connect | @MiniDestroyer07</title>
     <style>
-        /* CSS STYLES */
         :root {
-            --bg: #0f172a;
-            --card-bg: #1e293b;
-            --text: #f8fafc;
-            --accent: #38bdf8;
-            --secondary: #94a3b8;
+            --primary: #00ffaa; 
+            --bg: #050505;
+            --text: #ffffff;
+            --yt: #ff0000;
+            --twitch: #a970ff;
+            --live: #ff0055;
+            --discord: #5865F2;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        body.is-live { --primary: var(--live); }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; text-transform: uppercase; font-family: 'Inter', 'system-ui', sans-serif; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg);
             color: var(--text);
-            line-height: 1.6;
-        }
-
-        nav {
-            padding: 1.5rem 10%;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #334155;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+            transition: background 0.5s ease;
         }
 
-        .logo { font-weight: 800; font-size: 1.2rem; letter-spacing: -1px; }
-
-        header {
-            padding: 100px 10%;
-            text-align: center;
+        .bg-name {
+            position: fixed;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 8rem;
+            font-weight: 900;
+            z-index: -1;
+            opacity: 0.05;
+            white-space: nowrap;
+            letter-spacing: -5px;
+            pointer-events: none;
         }
 
-        h1 { font-size: 3.5rem; margin-bottom: 1rem; }
-        header p { color: var(--secondary); font-size: 1.2rem; max-width: 600px; margin: 0 auto; }
+        .container { width: 100%; max-width: 400px; position: relative; }
 
-        .container { padding: 80px 10%; }
+        header { margin: 60px 0 40px 0; }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
+        .name-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            line-height: 0.8;
+            letter-spacing: -3px;
+            margin-bottom: 10px;
+            background: linear-gradient(to bottom, #fff 40%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .card {
-            background: var(--card-bg);
-            padding: 2rem;
-            border-radius: 12px;
-            border: 1px solid #334155;
-            transition: transform 0.2s;
-        }
-
-        .card:hover { transform: translateY(-5px); border-color: var(--accent); }
-
-        .card h3 { margin-bottom: 1rem; color: var(--accent); }
-
-        .contact-btn {
+        .role-badge {
             display: inline-block;
-            margin-top: 2rem;
-            padding: 12px 24px;
-            background: var(--accent);
-            color: var(--bg);
-            text-decoration: none;
-            border-radius: 6px;
+            background: var(--primary);
+            color: #000;
+            padding: 4px 12px;
+            font-size: 0.7rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            margin-top: 5px;
+        }
+
+        .live-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            font-size: 0.7rem;
             font-weight: bold;
+            letter-spacing: 1px;
         }
 
-        footer {
-            text-align: center;
-            padding: 40px;
-            color: var(--secondary);
-            font-size: 0.9rem;
+        .dot { width: 12px; height: 12px; background: #222; position: relative; }
+        body.is-live .dot { background: var(--live); box-shadow: 0 0 15px var(--live); }
+        body.is-live .dot::after {
+            content: '';
+            position: absolute;
+            width: 100%; height: 100%;
+            background: var(--live);
+            animation: pulse 1.5s infinite;
         }
 
-        @media (max-width: 768px) {
-            h1 { font-size: 2.5rem; }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(3); opacity: 0; } }
+
+        .links-stack { display: flex; flex-direction: column; gap: 12px; }
+
+        .btn {
+            position: relative;
+            background: #111;
+            border: 1px solid #222;
+            padding: 20px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1rem;
+            overflow: hidden;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
         }
+
+        .btn:hover { border-color: var(--primary); background: #1a1a1a; transform: translateY(-3px); }
+        .btn::before { content: ''; position: absolute; left: 0; top: 0; width: 4px; height: 100%; background: var(--primary); opacity: 0; transition: 0.3s; }
+        .btn:hover::before { opacity: 1; }
+
+        .btn-main-row { display: flex; justify-content: space-between; width: 100%; align-items: center; }
+        .arrow { font-size: 1.2rem; opacity: 0.5; }
+
+        .discord-count {
+            font-size: 0.6rem;
+            color: var(--discord);
+            margin-top: 4px;
+            letter-spacing: 1px;
+            font-weight: 400;
+        }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+        .social { background: #111; padding: 18px; text-align: center; text-decoration: none; color: #fff; font-size: 0.75rem; font-weight: 800; border: 1px solid #222; transition: 0.2s; }
+        .social.yt:hover { color: var(--yt); border-color: var(--yt); }
+        .social.tw:hover { color: var(--twitch); border-color: var(--twitch); }
+        .social.insta:hover { color: #e1306c; border-color: #e1306c; }
+        .social.tiktok:hover { color: #00f2ea; border-color: #00f2ea; }
+
+        footer { margin-top: 60px; font-size: 0.6rem; color: #333; text-align: center; letter-spacing: 3px; }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="logo">PORTFOLIO</div>
-        <div>Available for work</div>
-    </nav>
+    <div class="bg-name">DESTROYER</div>
 
-    <header>
-        <h1>Creative Vision. <br>Technical Precision.</h1>
-        <p>I’m a professional specializing in high-impact digital solutions. Here is a look at my recent work and expertise.</p>
-        <a href="mailto:yourname@email.com" class="contact-btn">Get In Touch</a>
-    </header>
-
-    <section class="container" id="work">
-        <h2>Selected Projects</h2>
-        <div class="grid">
-            <div class="card">
-                <h3>Project Title One</h3>
-                <p>A brief description of the problem you solved and the tech you used.</p>
-            </div>
-            <div class="card">
-                <h3>Project Title Two</h3>
-                <p>Showcasing a different skill set or a major client accomplishment.</p>
-            </div>
-            <div class="card">
-                <h3>Project Title Three</h3>
-                <p>Detailing the results, such as "Increased efficiency by 20%."</p>
-            </div>
+    <div class="container">
+        <div class="live-status">
+            <div class="dot"></div>
+            <span id="status-text">OFFLINE</span>
         </div>
-    </section>
 
-    <footer>
-        <p>&copy; 2026 Your Name • Built with Gemini</p>
-    </footer>
+        <header>
+            <div class="name-title">MINI<br>DESTROYER</div>
+            <div class="role-badge">DIGITAL BROADCASTER</div>
+        </header>
 
+        <div class="links-stack">
+            <a href="https://www.twitch.tv/minidestroyer07" target="_blank" class="btn" id="stream-btn">
+                <div class="btn-main-row">
+                    <span id="cta-text">LATEST STREAM</span>
+                    <span class="arrow">→</span>
+                </div>
+            </a>
+            
+            <a href="https://www.youtube.com/@MiniDestroyer07" target="_blank" class="btn">
+                <div class="btn-main-row">
+                    <span>NEW YOUTUBE VIDEO</span>
+                    <span class="arrow">→</span>
+                </div>
+            </a>
+            
+            <a href="https://discord.gg/FTRzcnYn" target="_blank" class="btn">
+                <div class="btn-main-row">
+                    <span>COMMUNITY DISCORD</span>
+                    <span class="arrow">→</span>
+                </div>
+                <span class="discord-count" id="discord-online">SYNCING MEMBERS...</span>
+            </a>
+        </div>
+
+        <div class="grid">
+            <a href="https://www.youtube.com/@MiniDestroyer07" class="social yt" target="_blank">YOUTUBE</a>
+            <a href="https://www.twitch.tv/minidestroyer07" class="social tw" target="_blank">TWITCH</a>
+            <a href="https://www.instagram.com/minidestroyer07/" class="social insta" target="_blank">INSTAGRAM</a>
+            <a href="https://www.tiktok.com/@minidestroyer07" class="social tiktok" target="_blank">TIKTOK</a>
+        </div>
+
+        <footer>SYNC_ID: MD-07 // EST. 2026</footer>
+    </div>
+
+    <script>
+        const TWITCH_USER = 'minidestroyer07';
+        const DISCORD_ID = '1457925590358429830'; // Still need this for the discord count!
+
+        // NEW NO-CID METHOD: Checks Twitch RSS/Oembed data
+        async function checkTwitch() {
+            try {
+                // Using oEmbed is a clever way to check status without an API key
+                const response = await fetch(`https://twitch.tv/${TWITCH_USER}`);
+                const html = await response.text();
+                
+                // If the stream is live, the page meta-tags usually change
+                const isLive = html.includes('isLiveBroadcast') || html.includes('"isLive":true');
+                
+                if(isLive) {
+                    document.body.classList.add('is-live');
+                    document.getElementById('status-text').innerText = 'LIVE NOW';
+                    document.getElementById('cta-text').innerText = 'WATCH LIVE STREAM';
+                } else {
+                    document.body.classList.remove('is-live');
+                    document.getElementById('status-text').innerText = 'OFFLINE';
+                    document.getElementById('cta-text').innerText = 'LATEST STREAM';
+                }
+            } catch(e) {
+                console.log("Status check handled.");
+            }
+        }
+
+        async function getDiscordCount() {
+            if (DISCORD_ID === '1457925590358429830') {
+                document.getElementById('discord-online').innerText = "JOIN THE SQUAD";
+                return;
+            }
+            try {
+                const res = await fetch(`https://discord.com/api/guilds/${DISCORD_ID}/widget.json`);
+                const data = await res.json();
+                document.getElementById('discord-online').innerText = `${data.presence_count} ONLINE NOW`;
+            } catch (e) {
+                document.getElementById('discord-online').innerText = "JOIN THE SQUAD";
+            }
+        }
+
+        checkTwitch();
+        getDiscordCount();
+        setInterval(checkTwitch, 120000); // Check every 2 minutes
+    </script>
 </body>
 </html>
