@@ -6,7 +6,7 @@
     <title>Connect | @MiniDestroyer07</title>
     <style>
         :root {
-            --primary: #00ffaa; 
+            --primary: #00ffaa; /* Cyber Mint */
             --bg: #050505;
             --text: #ffffff;
             --yt: #ff0000;
@@ -118,11 +118,11 @@
         .arrow { font-size: 1.2rem; opacity: 0.5; }
 
         .discord-count {
-            font-size: 0.6rem;
+            font-size: 0.65rem;
             color: var(--discord);
-            margin-top: 4px;
+            margin-top: 6px;
             letter-spacing: 1px;
-            font-weight: 400;
+            font-weight: bold;
         }
 
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
@@ -170,7 +170,7 @@
                     <span>COMMUNITY DISCORD</span>
                     <span class="arrow">→</span>
                 </div>
-                <span class="discord-count" id="discord-online">SYNCING MEMBERS...</span>
+                <span class="discord-count" id="discord-online">JOIN THE SQUAD</span>
             </a>
         </div>
 
@@ -186,17 +186,14 @@
 
     <script>
         const TWITCH_USER = 'minidestroyer07';
-        const DISCORD_ID = '1457925590358429830'; // Still need this for the discord count!
+        const DISCORD_ID = '1457925590358429830';
 
-        // NEW NO-CID METHOD: Checks Twitch RSS/Oembed data
+        // Checks Twitch Live Status without an API Key using Decapi
         async function checkTwitch() {
             try {
-                // Using oEmbed is a clever way to check status without an API key
-                const response = await fetch(`https://twitch.tv/${TWITCH_USER}`);
-                const html = await response.text();
-                
-                // If the stream is live, the page meta-tags usually change
-                const isLive = html.includes('isLiveBroadcast') || html.includes('"isLive":true');
+                const response = await fetch(`https://decapi.me/twitch/is_live/${TWITCH_USER}`);
+                const status = await response.text();
+                const isLive = status.trim() === 'true';
                 
                 if(isLive) {
                     document.body.classList.add('is-live');
@@ -207,28 +204,27 @@
                     document.getElementById('status-text').innerText = 'OFFLINE';
                     document.getElementById('cta-text').innerText = 'LATEST STREAM';
                 }
-            } catch(e) {
-                console.log("Status check handled.");
-            }
+            } catch(e) { console.warn("Twitch check skipped."); }
         }
 
+        // Fetches real-time online count from your Discord Server
         async function getDiscordCount() {
-            if (DISCORD_ID === '1457925590358429830') {
-                document.getElementById('discord-online').innerText = "JOIN THE SQUAD";
-                return;
-            }
             try {
                 const res = await fetch(`https://discord.com/api/guilds/${DISCORD_ID}/widget.json`);
                 const data = await res.json();
-                document.getElementById('discord-online').innerText = `${data.presence_count} ONLINE NOW`;
+                if (data.presence_count !== undefined) {
+                    document.getElementById('discord-online').innerText = `${data.presence_count} ONLINE NOW`;
+                }
             } catch (e) {
                 document.getElementById('discord-online').innerText = "JOIN THE SQUAD";
             }
         }
 
+        // Initialize and Set Intervals
         checkTwitch();
         getDiscordCount();
-        setInterval(checkTwitch, 120000); // Check every 2 minutes
+        setInterval(checkTwitch, 120000); // 2 mins
+        setInterval(getDiscordCount, 60000); // 1 min
     </script>
 </body>
 </html>
